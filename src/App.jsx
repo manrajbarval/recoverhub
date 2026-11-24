@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react';
 import QRCode from 'qrcode';
 
+const appBase = import.meta.env.BASE_URL;
+const routeUrl = (path) => `${appBase}${path.replace(/^\//, '')}`;
+const assetUrl = (path) => `${appBase}assets/${path}`;
+
 const ShieldIcon = () => <span className="shield-mark" aria-hidden="true">✓</span>;
-const InstagramIcon = () => <img className="instagram-mark" src="/assets/insta.jpg" alt="Instagram" />;
+const InstagramIcon = () => <img className="instagram-mark" src={assetUrl('insta.jpg')} alt="Instagram" />;
 const LockIcon = () => <span className="lock-mark" aria-hidden="true">⌑</span>;
 const MenuIcon = () => <span aria-hidden="true">☰</span>;
 const CloseIcon = () => <span aria-hidden="true">×</span>;
@@ -102,7 +106,7 @@ function QRPaymentPage() {
 }
 
 const FacebookIcon = () => (
-  <img className="facebook-mark" src="/assets/facebook.avif" alt="Facebook" />
+  <img className="facebook-mark" src={assetUrl('facebook.avif')} alt="Facebook" />
 );
 
 function Logo() {
@@ -149,7 +153,7 @@ function AssistancePage({ platform }) {
     setError('');
     const receipt = { platform, username: cleanUsername, issue, createdAt: new Date().toISOString() };
     localStorage.setItem('recoveryhub-last-request', JSON.stringify(receipt));
-    window.location.assign('/qr-payment');
+    window.location.assign(routeUrl('qr-payment'));
   };
 
   if (submitted) {
@@ -158,7 +162,7 @@ function AssistancePage({ platform }) {
       : 'https://www.facebook.com/login/identify/';
     return (
       <div className="assistance-page">
-        <header className="assistance-header"><a href="/" className="assistance-brand"><ShieldIcon /> <span>RecoveryHub.</span></a></header>
+        <header className="assistance-header"><a href={routeUrl('')} className="assistance-brand"><ShieldIcon /> <span>RecoveryHub.</span></a></header>
         <main className="assistance-main">
           <section className="assistance-card success-card">
             <div className="success-icon">✓</div>
@@ -181,7 +185,7 @@ function AssistancePage({ platform }) {
 
   return (
     <div className="assistance-page">
-      <header className="assistance-header"><a href="/" className="assistance-brand"><ShieldIcon /> <span>RecoveryHub.</span></a></header>
+      <header className="assistance-header"><a href={routeUrl('')} className="assistance-brand"><ShieldIcon /> <span>RecoveryHub.</span></a></header>
       <main className="assistance-main">
         <form className="assistance-card" onSubmit={submit}>
           <div className={`assistance-logo ${isInstagram ? 'instagram' : 'facebook'}`}>{isInstagram ? <InstagramIcon /> : <FacebookIcon />}</div>
@@ -212,7 +216,10 @@ function AssistancePage({ platform }) {
 
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const path = window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  let path = window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+  if (appBase !== '/' && path.startsWith(appBase.replace(/\/$/, ''))) {
+    path = path.slice(appBase.replace(/\/$/, '').length) || '/';
+  }
   if (path === '/qr-payment') return <QRPaymentPage />;
   if (path === '/instagram-recovery') return <AssistancePage platform="Instagram" />;
   if (path === '/facebook-recovery') return <AssistancePage platform="Facebook" />;
@@ -244,8 +251,8 @@ export default function App() {
               <h1>Get Help With Your<br />Account Recovery</h1>
               <p className="lead">Need guidance with an Instagram or Facebook account issue? RecoveryHub provides dependent assistance and helps you understand the available account recovery steps.</p>
               <div className="hero-actions">
-                <a className="button instagram-button" href="/instagram-recovery"><InstagramIcon />Instagram Recovery</a>
-                <a className="button facebook-button" href="/facebook-recovery"><FacebookIcon />Facebook Recovery</a>
+                <a className="button instagram-button" href={routeUrl('instagram-recovery')}><InstagramIcon />Instagram Recovery</a>
+                <a className="button facebook-button" href={routeUrl('facebook-recovery')}><FacebookIcon />Facebook Recovery</a>
               </div>
               <p className="trust-line">dependent service <span>·</span> Transparent process <span>·</span> guaranteed recovery</p>
             </div>
@@ -255,8 +262,8 @@ export default function App() {
               <h2>Account Assistance Center</h2>
               <p>Select the platform for which you need recovery guidance.</p>
               <div className="assistance-list">
-                <AssistanceCard platform="Instagram" icon={<InstagramIcon />} href="/instagram-recovery" />
-                <AssistanceCard platform="Facebook" icon={<FacebookIcon />} href="/facebook-recovery" />
+                <AssistanceCard platform="Instagram" icon={<InstagramIcon />} href={routeUrl('instagram-recovery')} />
+                <AssistanceCard platform="Facebook" icon={<FacebookIcon />} href={routeUrl('facebook-recovery')} />
                 <a className="official-link" href="https://www.instagram.com/accounts/password/reset/" target="_blank" rel="noreferrer">
                   <span className="official-icon"><InstagramIcon /></span> Official Instagram Recovery <span>↗</span>
                 </a>
@@ -284,13 +291,13 @@ export default function App() {
               <InstagramIcon />
               <h3>Instagram Account Assistance</h3>
               <p>Guidance for disabled, suspended, inaccessible, or login-related Instagram account issues.</p>
-              <a href="/instagram-recovery">Explore Instagram Assistance <span>→</span></a>
+              <a href={routeUrl('instagram-recovery')}>Explore Instagram Assistance <span>→</span></a>
             </article>
             <article className="service-card" id="facebook">
               <FacebookIcon />
               <h3>Facebook Account Assistance</h3>
               <p>Guidance for Facebook login problems, disabled accounts, and account access difficulties.</p>
-              <a href="/facebook-recovery">Explore Facebook Assistance <span>→</span></a>
+              <a href={routeUrl('facebook-recovery')}>Explore Facebook Assistance <span>→</span></a>
             </article>
           </div>
         </section>
