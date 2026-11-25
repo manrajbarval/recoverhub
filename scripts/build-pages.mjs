@@ -1,5 +1,5 @@
 import { build } from 'vite';
-import { copyFile, cp, mkdir, writeFile } from 'node:fs/promises';
+import { copyFile, cp, mkdir, rm, writeFile } from 'node:fs/promises';
 
 await build({
   base: '/recoverhub/',
@@ -9,6 +9,7 @@ await build({
   }
 });
 
+await rm('assets', { recursive: true, force: true });
 await mkdir('assets', { recursive: true });
 await cp('dist/assets', 'assets', { recursive: true });
 await copyFile('dist/index.html', 'index.html');
