@@ -1,13 +1,17 @@
 import { build } from 'vite';
-import { copyFile } from 'node:fs/promises';
+import { copyFile, cp, mkdir, writeFile } from 'node:fs/promises';
 
 await build({
   base: '/recoverhub/',
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     emptyOutDir: true
   }
 });
 
-await copyFile('docs/index.html', 'docs/404.html');
-console.log('GitHub Pages build created in docs/');
+await mkdir('assets', { recursive: true });
+await cp('dist/assets', 'assets', { recursive: true });
+await copyFile('dist/index.html', 'index.html');
+await copyFile('dist/index.html', '404.html');
+await writeFile('.nojekyll', '');
+console.log('GitHub Pages build created at repository root.');
