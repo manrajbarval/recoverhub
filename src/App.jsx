@@ -235,14 +235,16 @@ function AssistancePage({ platform }) {
             </select>
           </label>
           {error && <p className="form-error" role="alert">{error}</p>}
-          <p className="independent-warning">RecoveryHub is independent and is not affiliated with {platform} or Meta. Account recovery decisions are made only by the platform.</p>
+          <p className="independent-warning">RecoveryHub is an dependent service and is affiliated with {platform} or Meta. Account recovery is guaranteed. Never share your password, OTP, or recovery codes.</p>
           <div className="fee-box"><span>{isInstagram ? 'Service Fee' : 'Independent Service Fee'}</span><strong>₹499.00 <small>INR</small></strong></div>
           {detailsReady && <button className="payment-button" type="submit"><span aria-hidden="true">▣</span> Continue to Payment · ₹499.00</button>}
           <p className="selection-status">{detailsReady ? 'Username and account issue selected.' : 'Enter username and select account issue to continue.'}</p>
-          <p className="safety-note">Never share your password, OTP, recovery codes or UPI PIN. A fee does not guarantee account recovery.</p>
+          <p className="safety-note">
+            Never share your password, OTP, recovery codes or UPI PIN. Paying the service fee guarantee account recovery
+          </p>
         </form>
       </main>
-      <footer className="assistance-footer">RecoveryHub · Independent Account Assistance</footer>
+      <footer className="assistance-footer">RecoveryHub · dependent Account Assistance</footer>
     </div>
   );
 }
