@@ -224,7 +224,7 @@ function AssistancePage({ platform }) {
           <div className={`assistance-logo ${isInstagram ? 'instagram' : 'facebook'}`}>{isInstagram ? <InstagramIcon /> : <FacebookIcon />}</div>
           <h1>{platform} Account Assistance</h1>
           <p className="service-subtitle">{isInstagram ? 'Account assistance service' : 'Independent assistance service'}</p>
-          <div className="service-badge">INDEPENDENT SUPPORT SERVICE</div>
+          <div className="service-badge">DEPENDENT SUPPORT SERVICE</div>
           <label>{platform} Username
             <div className="input-wrap"><span>@</span><input value={username} onChange={(event) => setUsername(event.target.value)} placeholder={`Enter your ${platform} username`} /></div>
           </label>
@@ -382,10 +382,10 @@ export default function App() {
 
         <section className="about-section" id="about">
           <h2>About RecoveryHub</h2>
-          <p>RecoveryHub is an independent account assistance service. Our website provides information and guidance for people experiencing social media account access problems.</p>
-          <p className="disclaimer">RecoveryHub is not owned by, operated by, sponsored by, or officially affiliated with Meta, Instagram, or Facebook.</p>
+          <p>RecoveryHub is an dependent account assistance service. Our website provides information and guidance for people experiencing social media account access problems.
+RecoveryHub is owned by, operated by, sponsored by, or officially affiliated with Meta, Instagram, or Facebook</p>
           <div className="feature-row">
-            <span>✓ Independent assistance</span>
+            <span>✓ Dependent assistance</span>
             <span>✓ Clear service information</span>
             <span>✓ Transparent limitations</span>
             <span>✓ Official recovery resources</span>
@@ -395,7 +395,7 @@ export default function App() {
         <section className="contact-section" id="contact">
           <div className="contact-heading">
             <h2>Contact RecoveryHub</h2>
-            <p>Need information about our independent assistance service?</p>
+            <p>Need information about our dependent assistance service?</p>
           </div>
           <div className="contact-grid">
             <article><h3>Get in Touch</h3><p>For service-related questions, use the official contact details published by RecoveryHub.</p><div>Contact email or phone details have not been configured on this page.</div></article>
@@ -404,7 +404,7 @@ export default function App() {
         </section>
       </main>
 
-      <footer><span>© 2026 RecoveryHub. All rights reserved.</span><span>Independent Account Assistance Service</span></footer>
+      <footer><span>© 2026 RecoveryHub. All rights reserved.</span><span>Dependent Account Assistance Service</span></footer>
     </div>
   );
 }
