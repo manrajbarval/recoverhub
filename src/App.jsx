@@ -69,7 +69,19 @@ function QRPaymentPage() {
     }
     setUtrError('');
     setUtrSubmitted(true);
+    const currentRequest = JSON.parse(localStorage.getItem('recoveryhub-last-request') || '{}');
+    localStorage.setItem('recoveryhub-payment-status', JSON.stringify({
+      ...currentRequest,
+      utr: cleanUtr,
+      paymentStatus: 'Pending',
+      submittedAt: new Date().toISOString()
+    }));
     setSuccessPopup(true);
+  };
+
+  const continueToStatus = () => {
+    setSuccessPopup(false);
+    window.location.assign(routeUrl('payment-status'));
   };
 
   return (
@@ -118,7 +130,7 @@ function QRPaymentPage() {
             <div className="success-popup-icon" aria-hidden="true">✓</div>
             <h2 id="success-popup-title">Request Sent Successfully</h2>
             <p>Your payment request has been submitted for verification.</p>
-            <button type="button" onClick={() => setSuccessPopup(false)}>Continue</button>
+            <button type="button" onClick={continueToStatus}>Continue</button>
           </div>
         </div>
       )}
@@ -235,6 +247,48 @@ function AssistancePage({ platform }) {
   );
 }
 
+function PaymentStatusPage() {
+  let payment = {};
+  try {
+    payment = JSON.parse(localStorage.getItem('recoveryhub-payment-status') || '{}');
+  } catch {
+    payment = {};
+  }
+
+  const username = payment.username || 'Not available';
+  const issue = payment.issue || 'Not available';
+  const platform = payment.platform || 'Not available';
+  const submittedAt = payment.submittedAt
+    ? new Date(payment.submittedAt).toLocaleString()
+    : 'Not available';
+
+  return (
+    <div className="payment-status-page">
+      <header className="status-header">
+        <a href={routeUrl('')} className="assistance-brand"><ShieldIcon /> <span>RecoveryHub.</span></a>
+      </header>
+      <main className="status-main">
+        <section className="status-card">
+          <div className="status-orbit" aria-hidden="true"><span /></div>
+          <p className="status-eyebrow">Payment Verification</p>
+          <h1>Request Status</h1>
+          <div className="status-badge"><span /> Pending</div>
+          <dl className="status-details">
+            <div><dt>Platform</dt><dd>{platform}</dd></div>
+            <div><dt>Username</dt><dd>@{username}</dd></div>
+            <div><dt>Issue</dt><dd>{issue}</dd></div>
+            <div><dt>Amount</dt><dd>₹499.00</dd></div>
+            <div><dt>Submitted</dt><dd>{submittedAt}</dd></div>
+          </dl>
+          <p className="status-note">Your request has been submitted and is currently under verification.</p>
+          <a className="status-home-button" href={routeUrl('')}>Back to Home</a>
+        </section>
+      </main>
+      <footer className="status-footer">RecoveryHub · Independent Account Assistance</footer>
+    </div>
+  );
+}
+
 export default function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   let path = window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '');
@@ -242,6 +296,7 @@ export default function App() {
     path = path.slice(appBase.replace(/\/$/, '').length) || '/';
   }
   if (path === '/qr-payment') return <QRPaymentPage />;
+  if (path === '/payment-status') return <PaymentStatusPage />;
   if (path === '/instagram-recovery') return <AssistancePage platform="Instagram" />;
   if (path === '/facebook-recovery') return <AssistancePage platform="Facebook" />;
 
