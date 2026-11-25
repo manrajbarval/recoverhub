@@ -12,15 +12,15 @@ const MenuIcon = () => <span aria-hidden="true">☰</span>;
 const CloseIcon = () => <span aria-hidden="true">×</span>;
 
 function QRPaymentPage() {
-  const upiId = '9982706764@fam';
-  const merchantName = 'RecoveryHub';
-  const amount = '499';
+  const upiId = 'BHARATPE2K0C0Y6L3C38634@unitype';
+  const merchantName = 'RECOVER HUB';
+  const amount = '499.00';
   const upiParams = new URLSearchParams({
     pa: upiId,
     pn: merchantName,
     am: amount,
     cu: 'INR',
-    tn: 'Account Assistance Service Payment'
+    tn: 'BHARAT PAY'
   });
   const upiDeepLink = `upi://pay?${upiParams.toString()}`;
   const [qrDataUrl, setQrDataUrl] = useState('');
@@ -29,6 +29,7 @@ function QRPaymentPage() {
   const [utrError, setUtrError] = useState('');
   const [utrSubmitted, setUtrSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [successPopup, setSuccessPopup] = useState(false);
 
   const copyUpiId = async () => {
     await navigator.clipboard.writeText(upiId);
@@ -68,6 +69,7 @@ function QRPaymentPage() {
     }
     setUtrError('');
     setUtrSubmitted(true);
+    setSuccessPopup(true);
   };
 
   return (
@@ -76,12 +78,21 @@ function QRPaymentPage() {
         <section className="qr-payment-card">
           <h1 className="qr-page-title">Secure Payment</h1>
           <p className="qr-page-subtitle">Scan the QR code using your supported UPI app</p>
-          <div className="qr-progress"><span style={{ width: `${(secondsLeft / 420) * 100}%` }} /></div>
+          <div
+            className="qr-progress"
+            role="progressbar"
+            aria-label="Payment time remaining"
+            aria-valuemin={0}
+            aria-valuemax={420}
+            aria-valuenow={secondsLeft}
+          >
+            <span style={{ width: `${(secondsLeft / 420) * 100}%` }} />
+          </div>
           <time className="qr-countdown" aria-live="polite">{minutes}:{seconds}</time>
-          <strong className="qr-amount">₹499 <small>INR</small></strong>
-          <div className="qr-frame">{qrDataUrl ? <img src={qrDataUrl} alt="UPI payment QR code with ₹499 prefilled" /> : <span className="qr-loading">Generating QR...</span>}</div>
+          <strong className="qr-amount">₹499.00 <small>INR</small></strong>
+          <div className="qr-frame">{qrDataUrl ? <img src={qrDataUrl} alt="UPI payment QR code with ₹499.00 prefilled" /> : <span className="qr-loading">Generating QR...</span>}</div>
           <p className="qr-apps">Open Google Pay, PhonePe, Paytm or another UPI app.</p>
-          <p className="qr-instruction">Scan this QR to view the ₹499 payment request.</p>
+          <p className="qr-instruction">Scan this QR to view the ₹499.00 payment request.</p>
           <div className="upi-id"><span>UPI ID:</span><strong>{upiId}</strong><button type="button" onClick={copyUpiId}>{copied ? 'Copied' : 'Copy UPI ID'}</button></div>
           <a className="upi-deep-link" href={upiDeepLink}>Open in UPI App</a>
           {qrDataUrl && <a className="qr-download" href={qrDataUrl} download="recoveryhub-payment-499-qr.png">Download Payment QR</a>}
@@ -101,6 +112,16 @@ function QRPaymentPage() {
           <div className="qr-verification"><span /><small>{secondsLeft <= 0 ? 'payment time expired' : 'payment verification'}</small></div>
         </section>
       </main>
+      {successPopup && (
+        <div className="success-popup-backdrop" role="presentation">
+          <div className="success-popup" role="alertdialog" aria-modal="true" aria-labelledby="success-popup-title">
+            <div className="success-popup-icon" aria-hidden="true">✓</div>
+            <h2 id="success-popup-title">Request Sent Successfully</h2>
+            <p>Your payment request has been submitted for verification.</p>
+            <button type="button" onClick={() => setSuccessPopup(false)}>Continue</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -203,8 +224,8 @@ function AssistancePage({ platform }) {
           </label>
           {error && <p className="form-error" role="alert">{error}</p>}
           <p className="independent-warning">RecoveryHub is independent and is not affiliated with {platform} or Meta. Account recovery decisions are made only by the platform.</p>
-          <div className="fee-box"><span>{isInstagram ? 'Service Fee' : 'Independent Service Fee'}</span><strong>₹499 <small>INR</small></strong></div>
-          {detailsReady && <button className="payment-button" type="submit"><span aria-hidden="true">▣</span> Continue to Payment · ₹499</button>}
+          <div className="fee-box"><span>{isInstagram ? 'Service Fee' : 'Independent Service Fee'}</span><strong>₹499.00 <small>INR</small></strong></div>
+          {detailsReady && <button className="payment-button" type="submit"><span aria-hidden="true">▣</span> Continue to Payment · ₹499.00</button>}
           <p className="selection-status">{detailsReady ? 'Username and account issue selected.' : 'Enter username and select account issue to continue.'}</p>
           <p className="safety-note">Never share your password, OTP, recovery codes or UPI PIN. A fee does not guarantee account recovery.</p>
         </form>
